@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SeGroS: Semantically-Grounded Supervision for Unified Multimodal Models</title>
+  <meta name="description" content="SeGroS: Enhancing Alignment for Unified Multimodal Models via Semantically-Grounded Supervision.">
+
+  <!-- Bulma + FontAwesome + Academicons (VideoCoF / Nerfies stack) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Noto+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <!-- MathJax -->
+  <script>window.MathJax = { tex: { inlineMath: [['$','$'],['\\(','\\)']] }, svg: { fontCache: 'global' } };</script>
+  <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+  <style>
+    :root {
+      --accent: #4c6ef5;
+      --accent-dark: #364fc7;
+      --ink: #1f2733;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Noto Sans', 'Google Sans', sans-serif; color: var(--ink); }
+    .title, .subtitle, .publication-title, .is-title-font { font-family: 'Google Sans', sans-serif; }
+
+    /* Navbar */
+    .navbar { border-bottom: 1px solid #eee; }
+    .navbar-brand-title { font-weight: 700; font-family: 'Google Sans', sans-serif; }
+
+    /* Hero */
+    .hero-head-pad { padding-top: 3rem; }
+    .publication-title { line-height: 1.15; }
+    .conference-badge {
+      display: inline-block; margin-bottom: 1.1rem;
+      padding: 0.3rem 0.9rem; border-radius: 999px;
+      background: #eef1ff; color: var(--accent-dark);
+      font-weight: 700; font-size: 0.95rem; letter-spacing: 0.02em;
+    }
+    .author-block { margin: 0 0.4rem; white-space: nowrap; }
+    .author-block a { color: var(--accent-dark); }
+    .affil-line { color: #555; }
+    .eql-note { font-size: 0.85rem; color: #666; margin-top: 0.6rem; }
+    .publication-links .button { border-radius: 999px; margin: 0.25rem; }
+
+    /* Sections */
+    .section-title { margin-bottom: 1.6rem !important; }
+    .content-narrow { max-width: 820px; margin: 0 auto; }
+
+    /* Placeholders */
+    .placeholder-box {
+      display:flex; align-items:center; justify-content:center; text-align:center;
+      width:100%; min-height: 300px; border-radius: 12px; padding: 1rem;
+      background: repeating-linear-gradient(45deg,#f3f4f8,#f3f4f8 18px,#eaecf3 18px,#eaecf3 36px);
+      color:#98a0b3; font-size:0.95rem; letter-spacing:0.05em; text-transform:uppercase;
+      border:1px dashed #ccd2e0;
+    }
+    .placeholder-box.is-tall { min-height: 420px; }
+    .placeholder-box.is-short { min-height: 150px; }
+
+    /* Result gallery: input -> output pairs */
+    .result-card { background:#fff; border:1px solid #edf0f5; border-radius:12px; padding:1rem;
+      box-shadow:0 3px 14px rgba(20,30,60,0.05); height:100%; }
+    .result-instruction {
+      background:#f5f7ff; border-left:3px solid var(--accent); border-radius:6px;
+      padding:0.6rem 0.85rem; margin:0.75rem 0; font-size:0.92rem; color:#3a4256;
+    }
+    .arrow-col { display:flex; align-items:center; justify-content:center; color:var(--accent); font-size:1.6rem; }
+    .subhead { font-family:'Google Sans',sans-serif; font-weight:700; color:var(--accent-dark);
+      font-size:1.15rem; margin: 2.2rem 0 1rem; text-align:center; }
+
+    .bibtex-box { background:#f6f7fb; border-radius:10px; }
+    pre code { font-size:0.85rem; }
+    .footer { padding: 2.5rem 1.5rem; background:#fafbfd; }
+  </style>
+</head>
+<body>
+
+  <!-- ===================== NAVBAR ===================== -->
+  <nav class="navbar is-fixed-top is-white" role="navigation">
+    <div class="navbar-brand">
+      <a class="navbar-item navbar-brand-title" href="#top">SeGroS</a>
+    </div>
+    <div class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" href="#abstract">Abstract</a>
+        <a class="navbar-item" href="#motivation">Motivation</a>
+        <a class="navbar-item" href="#method">Method</a>
+        <a class="navbar-item" href="#results">Results</a>
+        <a class="navbar-item" href="#bibtex">BibTeX</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- spacer for fixed navbar -->
+  <div id="top" style="height: 3.25rem;"></div>
+
+  <!-- ===================== HERO ===================== -->
+  <section class="section hero-head-pad">
+    <div class="container is-max-desktop">
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <span class="conference-badge">ECCV 2026</span>
+
+          <h1 class="title is-2 publication-title">
+            SeGroS: Enhancing Alignment for Unified Multimodal Models
+            via Semantically-Grounded Supervision
+          </h1>
+
+          <!-- Authors -->
+          <div class="is-size-5 publication-authors mt-4">
+            <span class="author-block"><a href="#">Jiyeong Kim</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="#">Yerim So</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="#">Hyesong Choi</a><sup>2</sup>,</span>
+            <span class="author-block"><a href="#">Uiwon Hwang</a><sup>1</sup>,</span>
+            <span class="author-block"><a href="#">Dongbo Min</a><sup>1,†</sup></span>
+          </div>
+
+          <!-- Affiliations -->
+          <div class="is-size-6 affil-line mt-3">
+            <span class="author-block"><sup>1</sup>Ewha Womans University, South Korea,</span>
+            <span class="author-block"><sup>2</sup>Soongsil University, South Korea</span>
+          </div>
+          <p class="eql-note"><sup>†</sup>Corresponding author</p>
+
+          <!-- Resource links -->
+          <div class="publication-links mt-4">
+            <span class="link-block">
+              <a href="https://arxiv.org/abs/2603.19807" class="button is-dark">
+                <span class="icon"><i class="fas fa-file-pdf"></i></span><span>Paper</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="https://arxiv.org/abs/2603.19807" class="button is-dark">
+                <span class="icon"><i class="ai ai-arxiv"></i></span><span>arXiv</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="#" class="button is-dark">
+                <span class="icon"><i class="fab fa-github"></i></span><span>Code</span>
+              </a>
+            </span>
+            <span class="link-block">
+              <a href="#" class="button is-dark">
+                <span class="icon"><i class="fas fa-database"></i></span><span>Data</span>
+              </a>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== TEASER / INTRO VIDEO ===================== -->
+  <section class="section pt-0">
+    <div class="container is-max-desktop">
+      <div class="placeholder-box is-tall">Teaser figure / intro video (placeholder)</div>
+      <p class="has-text-centered has-text-grey mt-3 is-size-6">
+        Placeholder caption — one-line overview of what SeGroS does.
+      </p>
+    </div>
+  </section>
+
+  <!-- ===================== ABSTRACT ===================== -->
+  <section class="section" id="abstract">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 section-title has-text-centered">Abstract</h2>
+      <div class="content is-size-5 has-text-justified content-narrow">
+        <p>
+          Unified Multimodal Models (UMMs) have emerged as a promising paradigm that integrates
+          multimodal understanding and generation within a unified modeling framework. However,
+          current generative training paradigms suffer from inherent limitations. We present
+          <strong>Semantically-Grounded Supervision (SeGroS)</strong>, a fine-tuning framework
+          designed to resolve the <em>granularity mismatch</em> and <em>supervisory redundancy</em>
+          in UMMs. At its core, we propose a novel <strong>visual grounding map</strong> to construct
+          two complementary supervision signals. First, we formulate semantic <strong>Visual Hints</strong>
+          to compensate for the sparsity of text prompts. Second, we generate a semantically-grounded
+          <strong>Corrupted Input</strong> to explicitly enhance the supervision of masking-based UMMs
+          by restricting the reconstruction loss to core text-aligned regions. Extensive evaluations on
+          GenEval, DPGBench, and CompBench demonstrate that SeGroS significantly improves generation
+          fidelity and cross-modal alignment across various UMM architectures.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== MOTIVATION ===================== -->
+  <section class="section has-background-light" id="motivation">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 section-title has-text-centered">Why Semantically-Grounded Supervision?</h2>
+      <div class="content is-size-5 has-text-justified content-narrow">
+        <p class="has-text-grey">
+          Placeholder — describe the two problems you address (granularity mismatch and supervisory
+          redundancy) and the intuition behind grounding supervision on text-aligned regions.
+        </p>
+      </div>
+      <div class="placeholder-box mt-4">Motivation figure (placeholder)</div>
+    </div>
+  </section>
+
+  <!-- ===================== METHOD ===================== -->
+  <section class="section" id="method">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 section-title has-text-centered">Method</h2>
+      <div class="placeholder-box is-tall mb-5">Framework / architecture figure (placeholder)</div>
+
+      <div class="content is-size-5 has-text-justified content-narrow">
+        <p class="has-text-grey">
+          Placeholder — walk through the pipeline: the visual grounding map, the semantic
+          <strong>Visual Hints</strong>, and the semantically-grounded <strong>Corrupted Input</strong>.
+          Inline equations render via MathJax, e.g.
+          $\mathcal{L} = \mathcal{L}_{\text{gen}} + \lambda\,\mathcal{L}_{\text{ground}}$.
+        </p>
+      </div>
+
+      <div class="subhead">Visual Hints</div>
+      <div class="placeholder-box is-short">Visual Hints illustration (placeholder)</div>
+
+      <div class="subhead">Semantically-Grounded Corrupted Input</div>
+      <div class="placeholder-box is-short">Corrupted Input illustration (placeholder)</div>
+    </div>
+  </section>
+
+  <!-- ===================== RESULTS (galleries, VideoCoF-style) ===================== -->
+  <section class="section has-background-light" id="results">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 section-title has-text-centered">Results</h2>
+      <p class="has-text-centered has-text-grey mb-5">
+        Placeholder galleries — replace boxes with your qualitative results.
+      </p>
+
+      <!-- Gallery group 1 -->
+      <div class="subhead">Text-to-Image Generation</div>
+      <div class="columns is-vcentered">
+        <div class="column">
+          <div class="result-card">
+            <div class="result-instruction">Prompt: "placeholder text prompt goes here."</div>
+            <div class="placeholder-box is-short">Generated image (placeholder)</div>
+          </div>
+        </div>
+        <div class="column">
+          <div class="result-card">
+            <div class="result-instruction">Prompt: "another placeholder prompt."</div>
+            <div class="placeholder-box is-short">Generated image (placeholder)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Gallery group 2: baseline vs ours pair -->
+      <div class="subhead">Comparison with Baselines</div>
+      <div class="columns is-vcentered">
+        <div class="column is-5">
+          <div class="result-card">
+            <p class="has-text-centered has-text-grey is-size-7 mb-2">Baseline</p>
+            <div class="placeholder-box is-short">Baseline output (placeholder)</div>
+          </div>
+        </div>
+        <div class="column is-2 arrow-col"><i class="fas fa-arrow-right"></i></div>
+        <div class="column is-5">
+          <div class="result-card">
+            <p class="has-text-centered has-text-weight-bold is-size-7 mb-2" style="color:var(--accent-dark)">SeGroS (Ours)</p>
+            <div class="placeholder-box is-short">Our output (placeholder)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quantitative table -->
+      <div class="subhead">Quantitative Evaluation</div>
+      <div class="content-narrow">
+        <table class="table is-fullwidth is-striped is-hoverable">
+          <thead>
+            <tr><th>Method</th><th>GenEval ↑</th><th>DPGBench ↑</th><th>CompBench ↑</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Baseline UMM</td><td>—</td><td>—</td><td>—</td></tr>
+            <tr><td><strong>+ SeGroS</strong></td><td><strong>—</strong></td><td><strong>—</strong></td><td><strong>—</strong></td></tr>
+          </tbody>
+        </table>
+        <p class="has-text-grey is-size-7 has-text-centered">Placeholder — fill in with your numbers.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== BIBTEX ===================== -->
+  <section class="section" id="bibtex">
+    <div class="container is-max-desktop">
+      <h2 class="title is-3 section-title">BibTeX</h2>
+      <div class="bibtex-box p-4">
+        <pre><code>@article{kim2026segros,
+  title   = {Enhancing Alignment for Unified Multimodal Models via Semantically-Grounded Supervision},
+  author  = {Kim, Jiyeong and So, Yerim and Choi, Hyesong and Hwang, Uiwon and Min, Dongbo},
+  journal = {arXiv preprint arXiv:2603.19807},
+  year    = {2026}
+}</code></pre>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== FOOTER ===================== -->
+  <footer class="footer">
+    <div class="content has-text-centered">
+      <p>
+        Page template adapted from
+        <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
+        Results are placeholders — SeGroS, ECCV 2026.
+      </p>
+    </div>
+  </footer>
+
+</body>
+</html>
