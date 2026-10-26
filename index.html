@@ -76,6 +76,16 @@
     .subhead { font-family:'Google Sans',sans-serif; font-weight:700; color:var(--accent-dark);
       font-size:1.15rem; margin: 2.2rem 0 1rem; text-align:center; }
 
+    .benchmark-table { font-size: 0.88rem; font-variant-numeric: tabular-nums; }
+    .benchmark-table th, .benchmark-table td { white-space: nowrap; vertical-align: middle; }
+    .benchmark-table thead th { text-align: center; }
+    .benchmark-table td { text-align: right; }
+    .benchmark-table .ours-row { background: #eef1ff; }
+    .benchmark-table .dataset-row th { background: #e5e9f2; text-align: left; }
+    .benchmark-table caption { text-align: left; padding: 0.6rem 0; color: #555; }
+    .table-container:focus-visible { outline: 2px solid var(--accent); }
+    section[id], h3[id] { scroll-margin-top: 4rem; }
+
     .bibtex-box { background:#f6f7fb; border-radius:10px; }
     pre code { font-size:0.85rem; }
     .footer { padding: 2.5rem 1.5rem; background:#fafbfd; }
@@ -195,7 +205,7 @@
       <div class="content is-size-5 has-text-justified content-narrow">
         <p>
           Sparse text prompts leave fine-grained visual details unspecified, while dense image
-          prompts can introduce redundant background information. SeGroS grounds supervision
+          prompts can introduce redundant information. SeGroS grounds supervision
           in text-aligned image regions to provide informative visual hints and focus
           reconstruction on semantically relevant targets.
         </p>
@@ -229,7 +239,7 @@
     <div class="container is-max-desktop">
       <h2 class="title is-3 section-title has-text-centered">Results</h2>
       <p class="has-text-centered has-text-grey mb-5">
-        Qualitative text-to-image generation results.
+        Qualitative results and quantitative evaluation.
       </p>
 
       <!-- Gallery group 1 -->
@@ -240,37 +250,60 @@
         </a>
       </figure>
 
-      <!-- Gallery group 2: baseline vs ours pair -->
-      <div class="subhead">Comparison with Baselines</div>
-      <div class="columns is-vcentered">
-        <div class="column is-5">
-          <div class="result-card">
-            <p class="has-text-centered has-text-grey is-size-7 mb-2">Baseline</p>
-            <div class="placeholder-box is-short">Baseline output (placeholder)</div>
-          </div>
-        </div>
-        <div class="column is-2 arrow-col"><i class="fas fa-arrow-right"></i></div>
-        <div class="column is-5">
-          <div class="result-card">
-            <p class="has-text-centered has-text-weight-bold is-size-7 mb-2" style="color:var(--accent-dark)">SeGroS (Ours)</p>
-            <div class="placeholder-box is-short">Our output (placeholder)</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Quantitative table -->
-      <div class="subhead">Quantitative Evaluation</div>
-      <div class="content-narrow">
-        <table class="table is-fullwidth is-striped is-hoverable">
+      <h3 class="subhead" id="quantitative">Quantitative Evaluation</h3>
+      <p class="has-text-centered has-text-grey mb-4">Text-to-image generation results from <a href="https://arxiv.org/html/2603.19807v1#S4.T1">Table 1</a>. Higher is better for all metrics.</p>
+      <div class="table-container" role="region" aria-label="Text-to-image generation performance" tabindex="0">
+        <table class="table is-fullwidth is-hoverable benchmark-table">
+          <caption>Text-to-image generation across unified multimodal models</caption>
           <thead>
-            <tr><th>Method</th><th>GenEval ↑</th><th>DPGBench ↑</th><th>CompBench ↑</th></tr>
+            <tr><th rowspan="2" scope="col">Model</th><th rowspan="2" scope="col">Method</th><th colspan="7" scope="colgroup">GenEval ↑</th><th scope="col">DPG-Bench ↑</th><th scope="col">CompBench ↑</th></tr>
+            <tr><th scope="col">Single</th><th scope="col">Two</th><th scope="col">Count</th><th scope="col">Color</th><th scope="col">Position</th><th scope="col">Attr.</th><th scope="col">Overall</th><th scope="col">Overall</th><th scope="col">Overall</th></tr>
           </thead>
           <tbody>
-            <tr><td>Baseline UMM</td><td>—</td><td>—</td><td>—</td></tr>
-            <tr><td><strong>+ SeGroS</strong></td><td><strong>—</strong></td><td><strong>—</strong></td><td><strong>—</strong></td></tr>
+            <tr class="dataset-row"><th colspan="11">Fine-tuning dataset: MidjourneyV6</th></tr>
+            <tr><th scope="row">Show-o-256</th><td>w/o SFT</td><td>97.4</td><td>63.3</td><td>52.1</td><td>82.3</td><td>14.2</td><td>30.3</td><td>56.6</td><td>70.65</td><td>73.58</td></tr>
+            <tr><th scope="row">Show-o-256</th><td>SFT*</td><td>97.8</td><td>63.4</td><td>53.4</td><td>80.3</td><td>16.5</td><td>33.5</td><td>57.5</td><td>74.6</td><td>75.37</td></tr>
+            <tr><th scope="row">Show-o-256</th><td>Reca</td><td>97.4</td><td><strong>73.6</strong></td><td><strong>56.0</strong></td><td>83.8</td><td>20.3</td><td>40.2</td><td>61.9</td><td>75.7</td><td>77.5*</td></tr>
+            <tr class="ours-row"><th scope="row">Show-o-256</th><td>Ours</td><td><strong>98.1</strong></td><td>72.5</td><td>54.4</td><td><strong>86.4</strong></td><td><strong>21.0</strong></td><td><strong>41.0</strong></td><td><strong>62.22</strong></td><td><strong>76.52</strong></td><td><strong>78.30</strong></td></tr>
+            <tr><th scope="row">Show-o-512</th><td>w/o SFT</td><td>97.2</td><td>80.3</td><td>61.9</td><td>78.2</td><td>27.3</td><td>52.3</td><td>66.2</td><td>82.21</td><td>80.53</td></tr>
+            <tr><th scope="row">Show-o-512</th><td>SFT*</td><td>97.2</td><td>84.1</td><td><strong>66.6</strong></td><td>80.9</td><td>26.8</td><td>46.8</td><td>67.03</td><td>81.8</td><td>80.02</td></tr>
+            <tr><th scope="row">Show-o-512</th><td>Reca</td><td><strong>98.1</strong></td><td><strong>93.4</strong></td><td>64.7</td><td>79.8</td><td><strong>38.0</strong></td><td><strong>55.8</strong></td><td><strong>71.63*</strong></td><td>84.94</td><td><strong>84.47</strong></td></tr>
+            <tr class="ours-row"><th scope="row">Show-o-512</th><td>Ours</td><td>97.8</td><td>91.4</td><td>65.0</td><td><strong>81.9</strong></td><td>35.0</td><td>53.0</td><td>70.69</td><td><strong>85.18</strong></td><td>84.35</td></tr>
+            <tr><th scope="row">OpenUni-1.6B</th><td>w/o SFT</td><td>96.8</td><td>63.3</td><td>46.4</td><td>80.1</td><td>18.5</td><td>30.8</td><td>56.0</td><td>76.29</td><td>75.47</td></tr>
+            <tr><th scope="row">OpenUni-1.6B</th><td>SFT*</td><td>97.8</td><td>76.8</td><td>55.9</td><td>81.9</td><td>25.5</td><td>36.0</td><td>62.32</td><td>79.7</td><td>81.25</td></tr>
+            <tr><th scope="row">OpenUni-1.6B</th><td>Reca</td><td>96.6</td><td><strong>85.4</strong></td><td>52.5</td><td><strong>84.3</strong></td><td><strong>46.5</strong></td><td>50.8</td><td>69.33*</td><td>80.45</td><td>83.1*</td></tr>
+            <tr class="ours-row"><th scope="row">OpenUni-1.6B</th><td>Ours</td><td><strong>98.8</strong></td><td>84.6</td><td><strong>56.9</strong></td><td>84.0</td><td>38.8</td><td><strong>54.0</strong></td><td><strong>69.5</strong></td><td><strong>81.33</strong></td><td><strong>83.83</strong></td></tr>
+            <tr><th scope="row">OpenUni-3.6B</th><td>w/o SFT</td><td>99.1</td><td>71.8</td><td>51.9</td><td>83.9</td><td>23.3</td><td>41.6</td><td>61.9</td><td>79.02</td><td>78.84</td></tr>
+            <tr><th scope="row">OpenUni-3.6B</th><td>SFT*</td><td>98.8</td><td>81.3</td><td><strong>55.9</strong></td><td>85.9</td><td>25.0</td><td>48.8</td><td>65.94</td><td>80.45</td><td>82.6</td></tr>
+            <tr><th scope="row">OpenUni-3.6B</th><td>Reca</td><td>99.1</td><td>92.7</td><td>52.3</td><td><strong>87.1</strong></td><td>43.8</td><td>70.3</td><td>74.1</td><td>82.75</td><td>86.0*</td></tr>
+            <tr class="ours-row"><th scope="row">OpenUni-3.6B</th><td>Ours</td><td><strong>99.7</strong></td><td><strong>95.2</strong></td><td>52.5</td><td>85.1</td><td><strong>46.8</strong></td><td><strong>73.0</strong></td><td><strong>75.37</strong></td><td><strong>83.37</strong></td><td><strong>86.14</strong></td></tr>
+            <tr><th scope="row">Harmon-0.5B</th><td>w/o SFT</td><td>99.7</td><td>80.5</td><td>55.8</td><td>86.7</td><td>32.2</td><td>49.7</td><td>67.6</td><td>80.12</td><td>80.34</td></tr>
+            <tr><th scope="row">Harmon-0.5B</th><td>SFT*</td><td><strong>100</strong></td><td>86.4</td><td>64.4</td><td>87.5</td><td>37.8</td><td>56.5</td><td>72.1</td><td>82.5</td><td>83.5</td></tr>
+            <tr><th scope="row">Harmon-0.5B</th><td>Reca</td><td>99.9</td><td><strong>92.3</strong></td><td>59.4</td><td><strong>91.7</strong></td><td>58.5</td><td>70.7</td><td>78.7</td><td>84.67</td><td>85.7*</td></tr>
+            <tr class="ours-row"><th scope="row">Harmon-0.5B</th><td>Ours</td><td><strong>100</strong></td><td>90.2</td><td><strong>65.3</strong></td><td>91.5</td><td><strong>66.0</strong></td><td><strong>75.8</strong></td><td><strong>81.5</strong></td><td><strong>85.4</strong></td><td><strong>86.9</strong></td></tr>
+            <tr class="dataset-row"><th colspan="11">Fine-tuning dataset: BLIP3o-60k</th></tr>
+            <tr><th scope="row">Harmon-1.5B</th><td>w/o SFT</td><td>99.4</td><td>87.3</td><td>68.7</td><td>86.4</td><td>44.9</td><td>51.1</td><td>72.9</td><td>80.93</td><td>81.36</td></tr>
+            <tr><th scope="row">Harmon-1.5B</th><td>SFT*</td><td>99.1</td><td>94.7</td><td>77.8</td><td>86.4</td><td>78.3</td><td>74.0</td><td>85.0</td><td>85.6</td><td>87.32</td></tr>
+            <tr><th scope="row">Harmon-1.5B</th><td>Reca</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>85.2</td><td>86.5</td><td>87.2*</td></tr>
+            <tr class="ours-row"><th scope="row">Harmon-1.5B</th><td>Ours</td><td><strong>100</strong></td><td><strong>97.7</strong></td><td><strong>79.1</strong></td><td><strong>90.4</strong></td><td><strong>83.5</strong></td><td><strong>81.3</strong></td><td><strong>88.66</strong></td><td><strong>86.58</strong></td><td><strong>88.08</strong></td></tr>
           </tbody>
         </table>
-        <p class="has-text-grey is-size-7 has-text-centered">Placeholder — fill in with your numbers.</p>
+      </div>
+      <p class="has-text-grey is-size-7">* Results reproduced using the official implementations. Bold indicates the best score within each backbone. Shaded rows indicate SeGroS (Ours).</p>
+
+      <h3 class="subhead" id="visual-understanding">Visual Understanding</h3>
+      <p class="has-text-centered has-text-grey mb-4">Harmon-1.5B fine-tuned on BLIP3o-60k. Results from <a href="https://arxiv.org/html/2603.19807v1#S4.T2">Table 2</a>; higher is better.</p>
+      <div class="table-container" role="region" aria-label="Visual understanding performance" tabindex="0">
+        <table class="table is-fullwidth is-hoverable benchmark-table">
+          <caption>Visual understanding performance</caption>
+          <thead><tr><th scope="col">Method</th><th scope="col">MME</th><th scope="col">POPE (Acc)</th><th scope="col">POPE (F1)</th><th scope="col">GQA</th><th scope="col">MMMU</th><th scope="col">SEED</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">w/o SFT</th><td>1195</td><td>83.8</td><td>83.9</td><td><strong>58.8</strong></td><td>34.7</td><td>65.2</td></tr>
+            <tr><th scope="row">SFT</th><td>1210</td><td>84.0</td><td>84.1</td><td>58.5</td><td>35.3</td><td>65.1</td></tr>
+            <tr><th scope="row">Reca</th><td>1190</td><td>83.9</td><td>83.4</td><td>58.5</td><td>34.9</td><td>65.1</td></tr>
+            <tr class="ours-row"><th scope="row">Ours</th><td><strong>1217</strong></td><td><strong>84.5</strong></td><td><strong>84.2</strong></td><td>58.7</td><td><strong>36.0</strong></td><td><strong>65.5</strong></td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </section>
@@ -296,7 +329,7 @@
       <p>
         Page template adapted from
         <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>.
-        Results are placeholders — SeGroS, ECCV 2026.
+        SeGroS, ECCV 2026.
       </p>
     </div>
   </footer>
