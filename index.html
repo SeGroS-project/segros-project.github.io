@@ -50,6 +50,10 @@
     .section-title { margin-bottom: 1.6rem !important; }
     .content-narrow { max-width: 820px; margin: 0 auto; }
 
+    .paper-figure { margin: 1.5rem 0; }
+    .paper-figure img { display: block; width: 100%; height: auto; background: white; }
+    .paper-figure a { display: block; }
+
     /* Placeholders */
     .placeholder-box {
       display:flex; align-items:center; justify-content:center; text-align:center;
@@ -157,10 +161,8 @@
   <!-- ===================== TEASER / INTRO VIDEO ===================== -->
   <section class="section pt-0">
     <div class="container is-max-desktop">
-      <div class="placeholder-box is-tall">Teaser figure / intro video (placeholder)</div>
-      <p class="has-text-centered has-text-grey mt-3 is-size-6">
-        Placeholder caption — one-line overview of what SeGroS does.
-      </p>
+      <figure class="paper-figure"><a href="assets/images/harmon15-ours.png" target="_blank" rel="noopener"><img src="assets/images/harmon15-ours.png" alt="Text-to-image generation examples from SeGroS on Harmon 1.5B." width="2400" height="1803" loading="eager" decoding="async"></a></figure>
+      <figure class="paper-figure"><a href="assets/images/method.png" target="_blank" rel="noopener"><img src="assets/images/method.png" alt="SeGroS overview: grounding map construction, visual hints, and corrupted input." width="2153" height="686" loading="lazy" decoding="async"></a></figure>
     </div>
   </section>
 
@@ -192,12 +194,14 @@
     <div class="container is-max-desktop">
       <h2 class="title is-3 section-title has-text-centered">Why Semantically-Grounded Supervision?</h2>
       <div class="content is-size-5 has-text-justified content-narrow">
-        <p class="has-text-grey">
-          Placeholder — describe the two problems you address (granularity mismatch and supervisory
-          redundancy) and the intuition behind grounding supervision on text-aligned regions.
+        <p>
+          Sparse text prompts leave fine-grained visual details unspecified, while dense image
+          prompts can introduce redundant background information. SeGroS grounds supervision
+          in text-aligned image regions to provide informative visual hints and focus
+          reconstruction on semantically relevant targets.
         </p>
       </div>
-      <div class="placeholder-box mt-4">Motivation figure (placeholder)</div>
+      <figure class="paper-figure"><a href="assets/images/intro.png" target="_blank" rel="noopener"><img src="assets/images/intro.png" alt="Comparison of text-only, image-only, and SeGroS supervision." width="2400" height="1350" loading="lazy" decoding="async"></a></figure>
     </div>
   </section>
 
@@ -205,22 +209,19 @@
   <section class="section" id="method">
     <div class="container is-max-desktop">
       <h2 class="title is-3 section-title has-text-centered">Method</h2>
-      <div class="placeholder-box is-tall mb-5">Framework / architecture figure (placeholder)</div>
+      <figure class="paper-figure"><a href="assets/images/method.png" target="_blank" rel="noopener"><img src="assets/images/method.png" alt="SeGroS framework and discriminative text-token filtering." width="2153" height="686" loading="lazy" decoding="async"></a></figure>
 
       <div class="content is-size-5 has-text-justified content-narrow">
-        <p class="has-text-grey">
-          Placeholder — walk through the pipeline: the visual grounding map, the semantic
-          <strong>Visual Hints</strong>, and the semantically-grounded <strong>Corrupted Input</strong>.
-          Inline equations render via MathJax, e.g.
-          $\mathcal{L} = \mathcal{L}_{\text{gen}} + \lambda\,\mathcal{L}_{\text{ground}}$.
+        <p>
+          SeGroS combines intra-modal and inter-modal text affinities to identify discriminative
+          text tokens and construct a visual grounding map. High-scoring image regions provide
+          visual hints, while low-scoring regions remain visible in the corrupted input so
+          reconstruction focuses on text-aligned targets.
         </p>
       </div>
 
-      <div class="subhead">Visual Hints</div>
-      <div class="placeholder-box is-short">Visual Hints illustration (placeholder)</div>
-
-      <div class="subhead">Semantically-Grounded Corrupted Input</div>
-      <div class="placeholder-box is-short">Corrupted Input illustration (placeholder)</div>
+      <div class="subhead">Visual Hints and Semantically-Grounded Corrupted Input</div>
+      <figure class="paper-figure"><a href="assets/images/attention-vis-final.png" target="_blank" rel="noopener"><img src="assets/images/attention-vis-final.png" alt="Visualization of semantic grounding, visual hints, and corrupted input." width="1838" height="634" loading="lazy" decoding="async"></a></figure>
     </div>
   </section>
 
